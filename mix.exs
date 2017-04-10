@@ -28,6 +28,10 @@ defmodule Accent.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:ex_doc, ">= 0.0.0", only: [:dev]}]
+    [
+      {:plug, "~> 1.3.4"},
+      # dev
+      {:ex_doc, ">= 0.0.0", only: [:dev]}
+    ]
   end
 end
