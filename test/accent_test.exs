@@ -18,8 +18,22 @@ defmodule AccentTest do
       assert Accent.camelize("_hello_world_") == "helloWorld"
     end
 
-    test "supports :atom as an input" do
+    test "supports atom as an input" do
       assert Accent.camelize(:hello_world) == :helloWorld
+    end
+  end
+
+  describe "underscore/1" do
+    test "converts camelCase to snake_case" do
+      assert Accent.underscore("helloWorld") == "hello_world"
+    end
+
+    test "converts CamelCase to snake_case" do
+      assert Accent.underscore("HelloWorld") == "hello_world"
+    end
+
+    test "supports atom as an input" do
+      assert Accent.underscore(:helloWorld) == :hello_world
     end
   end
 end
