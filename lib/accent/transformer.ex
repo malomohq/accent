@@ -1,13 +1,5 @@
 defmodule Accent.Transformer do
-  def transform(input, transformer) when not is_nil(transformer)  do
-    do_transform(input, transformer)
-  end
-
-  def transform(input, _transformer), do: input
-
-  # private
-
-  defp do_transform(input, transformer) do
+  def transform(input, transformer) do
     for {k, v} <- input, into: %{} do
       key = transformer.call(k)
 
