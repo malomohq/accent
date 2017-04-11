@@ -13,5 +13,9 @@ defmodule Accent.Transformer.CamelCaseTest do
     test "supports atom as an input" do
       assert Accent.Transformer.CamelCase.call(:hello_world) == :HelloWorld
     end
+
+    test "properly handles multiple consecutive underscores" do
+      assert Accent.Transformer.CamelCase.call("hello__world") == "HelloWorld"
+    end
   end
 end
