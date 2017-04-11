@@ -1,6 +1,7 @@
 # Accent
 
 [![Build Status](https://travis-ci.org/sticksnleaves/accent.svg?branch=master)](https://travis-ci.org/sticksnleaves/accent)
+[![Coverage Status](https://coveralls.io/repos/github/sticksnleaves/accent/badge.svg?branch=master)](https://coveralls.io/github/sticksnleaves/accent?branch=master)
 
 **TODO: Add description**
 
