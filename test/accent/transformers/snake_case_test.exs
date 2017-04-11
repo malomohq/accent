@@ -10,6 +10,14 @@ defmodule Accent.Transformer.SnakeCaseTest do
       assert Accent.Transformer.SnakeCase.call("HelloWorld") == "hello_world"
     end
 
+    test "converts pascalCase to snake_case" do
+      assert Accent.Transformer.SnakeCase.call("helloWorld") == "hello_world"
+    end
+
+    test "converts snake_case to snake_case" do
+      assert Accent.Transformer.SnakeCase.call("hello_world") == "hello_world"
+    end
+
     test "supports atom as an input" do
       assert Accent.Transformer.SnakeCase.call(:helloWorld) == :hello_world
     end

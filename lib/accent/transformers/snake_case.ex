@@ -15,7 +15,11 @@ defmodule Accent.Transformer.SnakeCase do
 
   # private
 
-  defp do_underscore(<<h::utf8, t::binary>>) do
+  defp do_underscore(<<h, t::binary>>) when h == ?_ do
+    <<h>> <> do_underscore(t)
+  end
+
+  defp do_underscore(<<h, t::binary>>) do
     is_upper_case = String.Casing.upcase(<<h>>) == <<h>>
 
     if is_upper_case do
