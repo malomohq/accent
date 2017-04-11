@@ -1,4 +1,4 @@
-defmodule Accent.Plug do
+defmodule Accent.Plug.Request do
   import Plug.Conn
 
   @doc false
@@ -10,13 +10,16 @@ defmodule Accent.Plug do
 
   @doc false
   def call(conn, opts) do
-    %{conn | params: transform(conn.params, opts[:transformer])}
+    case conn.params do
+      %Plug.Conn.Unfetched{} -> conn
+      _ -> %{conn | params: transform(conn.params, opts[:transformer])}
+    end
   end
 
   # private
 
-  defp transform(body, transformer) do
-    for {k, v} <- body, into: %{} do
+  defp transform(params, transformer) do
+    for {k, v} <- params, into: %{} do
       key = transformer.call(k)
 
       if (is_map(v)) do
