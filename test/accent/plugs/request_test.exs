@@ -19,7 +19,7 @@ defmodule Accent.Plug.RequestTest do
   describe "call/2" do
     test "converts keys to snake_case by default" do
       conn =
-        conn(:get, "/", %{"helloWorld" => "value"})
+        conn(:post, "/", %{"hello_world" => "value"})
         |> Accent.Plug.Request.call(@opts)
 
       assert conn.params == %{"hello_world" => "value"}
@@ -27,10 +27,30 @@ defmodule Accent.Plug.RequestTest do
 
     test "converts keys using provided transformer" do
       conn =
-        conn(:get, "/", %{"hello_world" => "value"})
+        conn(:post, "/", %{"hello_world" => "value"})
         |> Accent.Plug.Request.call(Accent.Plug.Request.init([transformer: Accent.Transformer.CamelCase]))
 
       assert conn.params == %{"HelloWorld" => "value"}
+    end
+
+    test "properly handles POST requests" do
+      conn =
+        conn(:post, "/", "{\"helloWorld\": \"value\"}")
+        |> put_req_header("content-type", "application/json")
+        |> Plug.Parsers.call(Plug.Parsers.init([parsers: [:json], json_decoder: Poison]))
+        |> Accent.Plug.Request.call(@opts)
+
+      assert conn.params == %{"hello_world" => "value"}
+    end
+
+    test "properly handles GET requests" do
+      conn =
+        conn(:get, "/?helloWorld=value")
+        |> put_req_header("content-type", "application/json")
+        |> Plug.Parsers.call(Plug.Parsers.init([parsers: [:json], json_decoder: Poison]))
+        |> Accent.Plug.Request.call(@opts)
+
+      assert conn.params == %{"hello_world" => "value"}
     end
   end
 end
