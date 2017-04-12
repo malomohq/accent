@@ -3,6 +3,8 @@ defmodule Accent.Transformer.CamelCase do
   Converts the given binary or atom to CamelCase format.
   """
 
+  @behaviour Accent.Transformer
+
   def call(atom) when is_atom(atom) do
     String.to_atom(call(to_string(atom)))
   end

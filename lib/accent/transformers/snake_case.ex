@@ -3,6 +3,8 @@ defmodule Accent.Transformer.SnakeCase do
   Converts the given binary or atom to snake_case format.
   """
 
+  @behaviour Accent.Transformer
+
   def call(atom) when is_atom(atom) do
     String.to_atom(call(to_string(atom)))
   end
