@@ -43,16 +43,16 @@ defmodule Accent.Plug.ResponseTest do
       end
     end
 
-    test "sets the \"supported_transformers\" option to the value passed in" do
-      opts = Accent.Plug.Response.init(@default_opts ++ [supported_transformers: %{"test" => "some transformer"}])
+    test "sets the \"supported_cases\" option to the value passed in" do
+      opts = Accent.Plug.Response.init(@default_opts ++ [supported_cases: %{"test" => "some transformer"}])
 
-      assert %{supported_transformers: %{"test" => "some transformer"}} = opts
+      assert %{supported_cases: %{"test" => "some transformer"}} = opts
     end
 
-    test "defaults the \"supported_transformers\" option" do
+    test "defaults the \"supported_cases\" option" do
       opts = Accent.Plug.Response.init(@default_opts)
 
-      assert %{supported_transformers: %{
+      assert %{supported_cases: %{
         "camel" => Accent.Transformer.CamelCase,
         "pascal" => Accent.Transformer.PascalCase,
         "snake" => Accent.Transformer.SnakeCase

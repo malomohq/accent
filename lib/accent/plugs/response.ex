@@ -1,22 +1,55 @@
 defmodule Accent.Plug.Response do
+  @moduledoc """
+  Transforms the keys of an HTTP response to the case requested by the client.
+
+  A client can request what case the keys are formatted in by passing the case
+  as a header in the request. By default the header key is `Accent`. If the
+  client does not request a case or requests an unsupported case then no
+  conversion will happen. By default the supported cases are `camel`, `pascal`
+  and `snake`.
+
+  ## Options
+
+  * `:header` - the HTTP header used to determine the case to convert the
+    response body to before sending the response (default: `Accent`)
+  * `:json_encoder` - module used to encode JSON. The module is expected to
+    define a `encode!/1` function for encoding the response body as JSON.
+    (required)
+  * `:json_decoder` - module used to decode JSON. The module is expected to
+    define a `decode!/1` function for decoding JSON into a map. (required)
+  * `:supported_cases` - map that defines what cases a client can request. By
+    default `camel`, `pascal` and `snake` are supported.
+
+  ## Examples
+
+  ```
+  plug Accent.Plug.Response, header: "x-accent",
+                             supported_cases: %{"pascal" => Accent.Transformer.PascalCase},
+                             json_encoder: Poison,
+                             json_decoder: Poison
+  ```
+  """
+
   import Plug.Conn
   import Accent.Transformer
 
-  @supported_transformers %{
+  @default_cases %{
     "camel" => Accent.Transformer.CamelCase,
     "pascal" => Accent.Transformer.PascalCase,
     "snake" => Accent.Transformer.SnakeCase
   }
 
+  @doc false
   def init(opts \\ []) do
     %{
       header: opts[:header] || "accent",
       json_decoder: opts[:json_decoder] || raise(ArgumentError, "Accent.Plug.Response expects a :json_decoder option"),
       json_encoder: opts[:json_encoder] || raise(ArgumentError, "Accent.Plug.Response expects a :json_encoder option"),
-      supported_transformers: opts[:supported_transformers] || @supported_transformers
+      supported_cases: opts[:supported_cases] || @default_cases
     }
   end
 
+  @doc false
   def call(conn, opts) do
     if do_call?(conn, opts) do
       conn
@@ -55,8 +88,8 @@ defmodule Accent.Plug.Response do
 
   defp select_transformer(conn, opts) do
     accent = get_req_header(conn, opts[:header]) |> Enum.at(0)
-    supported_transformers = opts[:supported_transformers]
+    supported_cases = opts[:supported_cases]
 
-    supported_transformers[accent]
+    supported_cases[accent]
   end
 end
