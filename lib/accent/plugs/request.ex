@@ -1,6 +1,6 @@
 defmodule Accent.Plug.Request do
   @moduledoc """
-  Transform the keys of an HTTP request's params to the same or a different
+  Transforms the keys of an HTTP request's params to the same or a different
   case.
 
   You can specify what case to convert keys to by passing in a `:transformer`
