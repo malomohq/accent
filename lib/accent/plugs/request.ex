@@ -18,7 +18,7 @@ defmodule Accent.Plug.Request do
   Please note that this plug will need to be executed after the request has
   been parsed.
 
-  ### Example
+  ## Example
 
   ```
   plug Plug.Parsers, parsers: [:urlencoded, :multipart, :json],
