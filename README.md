@@ -39,7 +39,7 @@ used.
 Please note that this plug will need to be executed after the request has
 been parsed.
 
-## Example
+### Example
 
 Given this request:
 
@@ -75,7 +75,7 @@ client does not request a case or requests an unsupported case then no
 conversion will happen. By default the supported cases are `camel`, `pascal`
 and `snake`.
 
-## Options
+### Options
 
 * `:header` - the HTTP header used to determine the case to convert the
   response body to before sending the response (default: `Accent`)
@@ -87,7 +87,7 @@ and `snake`.
 * `:supported_cases` - map that defines what cases a client can request. By
   default `camel`, `pascal` and `snake` are supported.
 
-## Examples
+### Examples
 
 Given this request:
 
