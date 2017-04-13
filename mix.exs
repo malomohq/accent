@@ -50,10 +50,12 @@ defmodule Accent.Mixfile do
   end
 
   defp package do
-    maintainers: ["Anthony Smith"],
-    licenses: ["MIT"],
-    links: %{
-      GitHub: "https://github.com/sticksnleaves/accent"
+    %{
+      maintainers: ["Anthony Smith"],
+      licenses: ["MIT"],
+      links: %{
+        GitHub: "https://github.com/sticksnleaves/accent"
+      }
     }
   end
 end
