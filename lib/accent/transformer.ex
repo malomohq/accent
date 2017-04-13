@@ -12,15 +12,25 @@ defmodule Accent.Transformer do
   well.
   """
   @spec transform(map, Accent.Transformer) :: map
-  def transform(input, transformer) do
-    for {k, v} <- input, into: %{} do
+  def transform(%{} = map, transformer) do
+    for {k, v} <- map, into: %{} do
       key = transformer.call(k)
 
-      if (is_map(v)) do
+      if is_map(v) || is_list(v) do
         {key, transform(v, transformer)}
       else
         {key, v}
       end
+    end
+  end
+
+  @doc """
+  Convert the keys of a list based on the provided transformer.
+  """
+  @spec transform(list, Accent.Transformer) :: list
+  def transform(list, transformer) do
+    for i <- list, into: [] do
+      transform(i, transformer)
     end
   end
 end

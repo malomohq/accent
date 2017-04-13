@@ -11,5 +11,10 @@ defmodule Accent.TransformerTest do
       assert Accent.Transformer.transform(%{"helloWorld" => %{"fooBar" => "value"}}, Accent.Transformer.SnakeCase)
         == %{"hello_world" => %{"foo_bar" => "value"}}
     end
+
+    test "property handles arrays" do
+      assert Accent.Transformer.transform(%{"helloWorld" => [%{"fooBar" => "value"}]}, Accent.Transformer.SnakeCase)
+        == %{"hello_world" => [%{"foo_bar" => "value"}]}
+    end
   end
 end
