@@ -4,11 +4,14 @@ defmodule Accent.Mixfile do
   def project do
     [
      app: :accent,
+     name: "Accent",
+     description: "Plug for converting JSON API keys to different cases",
      version: "0.1.0",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps(),
+     package: package(),
      preferred_cli_env: [
        "coveralls": :test,
        "coveralls.html": :test,
@@ -44,5 +47,13 @@ defmodule Accent.Mixfile do
       {:excoveralls, "~> 0.6.3", only: [:test]},
       {:poison, "~> 3.1.0", only: [:test]}
     ]
+  end
+
+  defp package do
+    maintainers: ["Anthony Smith"],
+    licenses: ["MIT"],
+    links: %{
+      GitHub: "https://github.com/sticksnleaves/accent"
+    }
   end
 end
