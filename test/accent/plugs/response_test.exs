@@ -13,6 +13,12 @@ defmodule Accent.Plug.ResponseTest do
       assert %{header: "x-accent"} = opts
     end
 
+    test "sets the \"default_case\" option to the value passed in" do
+      opts = Accent.Plug.Response.init(@default_opts ++ [default_case: "pascal"])
+
+      assert %{default_case: "pascal"} = opts
+    end
+
     test "defaults the \"header\" option to \"accent\"" do
       opts = Accent.Plug.Response.init(@default_opts)
 
@@ -97,6 +103,31 @@ defmodule Accent.Plug.ResponseTest do
         conn(:post, "/")
         |> put_req_header("content-type", "application/something+json")
         |> Accent.Plug.Response.call(@opts)
+        |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
+
+      assert conn.resp_body == "{\"hello_world\":\"value\"}"
+    end
+
+    test "uses default case if specified" do
+      opts = Accent.Plug.Response.init(@default_opts ++ [default_case: "pascal"])
+
+      conn =
+        conn(:post, "/")
+        |> put_req_header("content-type", "application/something+json")
+        |> Accent.Plug.Response.call(opts)
+        |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
+
+      assert conn.resp_body == "{\"helloWorld\":\"value\"}"
+    end
+
+    test "does not use default case if header is supplied" do
+      opts = Accent.Plug.Response.init(@default_opts ++ [default_case: "pascal"])
+
+      conn =
+        conn(:post, "/")
+        |> put_req_header("content-type", "application/something+json")
+        |> put_req_header("accent", "snake")
+        |> Accent.Plug.Response.call(opts)
         |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
 
       assert conn.resp_body == "{\"hello_world\":\"value\"}"

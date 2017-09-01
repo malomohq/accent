@@ -43,6 +43,7 @@ defmodule Accent.Plug.Response do
   def init(opts \\ []) do
     %{
       header: opts[:header] || "accent",
+      default_case: opts[:default_case],
       json_decoder: opts[:json_decoder] || raise(ArgumentError, "Accent.Plug.Response expects a :json_decoder option"),
       json_encoder: opts[:json_encoder] || raise(ArgumentError, "Accent.Plug.Response expects a :json_encoder option"),
       supported_cases: opts[:supported_cases] || @default_cases
@@ -87,9 +88,14 @@ defmodule Accent.Plug.Response do
   end
 
   defp select_transformer(conn, opts) do
-    accent = get_req_header(conn, opts[:header]) |> Enum.at(0)
+    accent = 
+      case get_req_header(conn, opts[:header]) do
+        [] -> opts[:default_case]
+        [accent] -> accent
+      end
+    
     supported_cases = opts[:supported_cases]
-
     supported_cases[accent]
   end
+
 end
