@@ -79,6 +79,7 @@ and `snake`.
 
 * `:header` - the HTTP header used to determine the case to convert the
   response body to before sending the response (default: `Accent`)
+* `:default_case` - use  `camel`, `pascal` or `snake` as the default case if not specified in header
 * `:json_encoder` - module used to encode JSON. The module is expected to
   define a `encode!/1` function for encoding the response body as JSON.
   (required)
