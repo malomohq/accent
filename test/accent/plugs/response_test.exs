@@ -107,15 +107,6 @@ defmodule Accent.Plug.ResponseTest do
 
       assert conn.resp_body == "<p>This is not JSON, but it includes some hello_world</p>"
     end
-
-    test "supports \"+json\" content types" do
-      conn =
-        conn(:post, "/")
-        |> put_req_header("content-type", "application/something+json")
-        |> Accent.Plug.Response.call(@opts)
-        |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
-
-      assert conn.resp_body == "{\"hello_world\":\"value\"}"
-    end
+    
   end
 end
