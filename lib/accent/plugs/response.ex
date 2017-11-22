@@ -62,11 +62,15 @@ defmodule Accent.Plug.Response do
   # private
 
   defp before_send_callback(conn, opts) do
-    response_content_type = 
+    response_content_type =
       conn
       |> get_resp_header("content-type")
       |> Enum.at(0)
     
+    # Note - we don't support "+json" content types, and probably shouldn't add
+    # as a general feature because they may have specifications for the param
+    # names - e.g. https://tools.ietf.org/html/rfc7265#page-6 that mean the
+    # translation would be inappropriate
     is_json_response = String.contains?(response_content_type || "", "application/json")
 
     if is_json_response do
@@ -82,11 +86,11 @@ defmodule Accent.Plug.Response do
       %{conn | resp_body: resp_body}
     else
       conn
-    end 
+    end
   end
 
   defp do_call?(conn, opts) do
-    content_type = 
+    content_type =
       conn
       |> get_req_header("content-type")
       |> Enum.at(0)
