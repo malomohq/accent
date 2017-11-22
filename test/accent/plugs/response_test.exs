@@ -72,6 +72,17 @@ defmodule Accent.Plug.ResponseTest do
       assert conn.resp_body == "{\"helloWorld\":\"value\"}"
     end
 
+    test "deals with content-type having a charset" do
+      conn =
+        conn(:post, "/")
+        |> put_req_header("accent", "pascal")
+        |> put_req_header("content-type", "application/json; charset=utf-8")
+        |> Accent.Plug.Response.call(@opts)
+        |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
+
+      assert conn.resp_body == "{\"helloWorld\":\"value\"}"
+    end
+
     test "skips conversion if no header is provided" do
       conn =
         conn(:post, "/")
@@ -85,6 +96,7 @@ defmodule Accent.Plug.ResponseTest do
     test "skips conversion if content type is not JSON" do
       conn =
         conn(:post, "/")
+        |> put_req_header("accent", "pascal")
         |> put_req_header("content-type", "application/something")
         |> Accent.Plug.Response.call(@opts)
         |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
