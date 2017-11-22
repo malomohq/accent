@@ -62,22 +62,27 @@ defmodule Accent.Plug.Response do
   # private
 
   defp before_send_callback(conn, opts) do
-    is_json_response =
-    conn
-    |> get_req_header("content-type")
-    |> Enum.at(0) || ""
-    |> String.ends_with?("json")
+    response_content_type = 
+      conn
+      |> get_resp_header("content-type")
+      |> Enum.at(0)
+    
+    is_json_response = String.contains?(response_content_type || "", "application/json")
 
-    json_decoder = opts[:json_decoder]
-    json_encoder = opts[:json_encoder]
-
-    resp_body =
-      conn.resp_body
-      |> json_decoder.decode!
-      |> transform(select_transformer(conn, opts))
-      |> json_encoder.encode!
-
-    %{conn | resp_body: resp_body}
+    if is_json_response do
+      json_decoder = opts[:json_decoder]
+      json_encoder = opts[:json_encoder]
+  
+      resp_body =
+        conn.resp_body
+        |> json_decoder.decode!
+        |> transform(select_transformer(conn, opts))
+        |> json_encoder.encode!
+  
+      %{conn | resp_body: resp_body}
+    else
+      conn
+    end 
   end
 
   defp do_call?(conn, opts) do
