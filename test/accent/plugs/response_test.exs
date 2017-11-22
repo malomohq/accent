@@ -89,6 +89,7 @@ defmodule Accent.Plug.ResponseTest do
       conn =
         conn(:post, "/")
         |> put_req_header("content-type", "application/json")
+        |> put_resp_header("content-type", "application/json")
         |> Accent.Plug.Response.call(@opts)
         |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
 
@@ -100,6 +101,7 @@ defmodule Accent.Plug.ResponseTest do
         conn(:post, "/")
         |> put_req_header("accent", "pascal")
         |> put_req_header("content-type", "text/html")
+        |> put_resp_header("content-type", "text/html")
         |> Accent.Plug.Response.call(@opts)
         |> Plug.Conn.send_resp(200, "<p>This is not JSON, but it includes some hello_world</p>")
 
