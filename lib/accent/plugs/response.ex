@@ -66,7 +66,7 @@ defmodule Accent.Plug.Response do
       conn
       |> get_resp_header("content-type")
       |> Enum.at(0)
-    
+
     # Note - we don't support "+json" content types, and probably shouldn't add
     # as a general feature because they may have specifications for the param
     # names - e.g. https://tools.ietf.org/html/rfc7265#page-6 that mean the
@@ -76,13 +76,13 @@ defmodule Accent.Plug.Response do
     if is_json_response do
       json_decoder = opts[:json_decoder]
       json_encoder = opts[:json_encoder]
-  
+
       resp_body =
         conn.resp_body
         |> json_decoder.decode!
         |> transform(select_transformer(conn, opts))
         |> json_encoder.encode!
-  
+
       %{conn | resp_body: resp_body}
     else
       conn
@@ -94,12 +94,12 @@ defmodule Accent.Plug.Response do
       conn
       |> get_req_header("content-type")
       |> Enum.at(0)
-    
+
     is_json = String.contains?(content_type || "", "application/json")
 
     has_transformer = select_transformer(conn, opts)
 
-    response = is_json && has_transformer
+    is_json && has_transformer
   end
 
   defp select_transformer(conn, opts) do
