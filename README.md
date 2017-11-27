@@ -125,5 +125,5 @@ a client could expect a JSON response of:
 
 A special thanks to all of our contributors!
 
-[@anthonator](https://github.com/anthonator)
-[@maxsalven](https://github.com/maxsalven)
+* [@anthonator](https://github.com/anthonator)
+* [@maxsalven](https://github.com/maxsalven)
