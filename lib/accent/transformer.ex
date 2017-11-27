@@ -30,7 +30,11 @@ defmodule Accent.Transformer do
   @spec transform(list, Accent.Transformer) :: list
   def transform(list, transformer) do
     for i <- list, into: [] do
-      transform(i, transformer)
+      if is_map(i) || is_list(i) do
+        transform(i, transformer)
+      else
+        i
+      end
     end
   end
 end
