@@ -12,7 +12,7 @@ defmodule Accent.Transformer.SnakeCase do
   def call(""), do: ""
 
   def call(<<h::utf8, t::binary>>) do
-    String.Casing.downcase(<<h>>) <> do_underscore(t)
+    String.downcase(<<h>>) <> do_underscore(t)
   end
 
   # private
@@ -22,10 +22,10 @@ defmodule Accent.Transformer.SnakeCase do
   end
 
   defp do_underscore(<<h, t::binary>>) do
-    is_upper_case = String.Casing.upcase(<<h>>) == <<h>>
+    is_upper_case = String.upcase(<<h>>) == <<h>>
 
     if is_upper_case do
-      "_" <> String.Casing.downcase(<<h>>) <> do_underscore(t)
+      "_" <> String.downcase(<<h>>) <> do_underscore(t)
     else
       <<h>> <> do_underscore(t)
     end
