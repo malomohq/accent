@@ -32,7 +32,7 @@ defmodule Accent.Mixfile do
       {:ex_doc, ">= 0.0.0", only: [:dev]},
       # test
       {:excoveralls, "~> 0.10", only: [:test]},
-      {:poison, "~> 3.1.0", only: [:test]}
+      {:poison, ">= 3.1.0 and <= 5.0.0", only: [:test]}
     ]
   end
 
