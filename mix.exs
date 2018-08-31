@@ -11,6 +11,7 @@ defmodule Accent.Mixfile do
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      lockfile: lockfile(),
       package: package(),
       preferred_cli_env: [
         coveralls: :test,
@@ -35,6 +36,17 @@ defmodule Accent.Mixfile do
       # test
       {:excoveralls, "~> 0.10", only: [:test]}
     ]
+  end
+
+  defp lockfile do
+    cond do
+      Version.match?(System.version(), "~> 1.3.0 and < 1.4.0") ->
+        "mix_1_3.lock"
+      Version.match?(System.version(), "~> 1.4.0 and < 1.6.0") ->
+        "mix_1_4.lock"
+      true ->
+        "mix.lock"
+    end
   end
 
   defp package do
