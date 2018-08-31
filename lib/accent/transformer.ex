@@ -2,7 +2,7 @@ defmodule Accent.Transformer do
   @doc """
   Converts a string or atom to the same or different case.
   """
-  @callback call(String.t | atom) :: String.t | atom
+  @callback call(String.t() | atom) :: String.t() | atom
 
   @doc """
   Convert the keys of a map based on the provided transformer.

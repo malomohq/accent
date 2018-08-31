@@ -4,7 +4,7 @@ defmodule Accent.Plug.ResponseTest do
 
   @default_opts [json_decoder: Poison, json_encoder: Poison]
 
-  @opts Accent.Plug.Response.init([json_decoder: Poison, json_encoder: Poison])
+  @opts Accent.Plug.Response.init(json_decoder: Poison, json_encoder: Poison)
 
   describe "init/1" do
     test "sets the \"header\" option to the value passed in" do
@@ -27,7 +27,7 @@ defmodule Accent.Plug.ResponseTest do
 
     test "raises ArgumentError if \"json_decoder\" is not defined" do
       assert_raise ArgumentError, fn ->
-        Accent.Plug.Response.init([json_encoder: Poison])
+        Accent.Plug.Response.init(json_encoder: Poison)
       end
     end
 
@@ -39,12 +39,15 @@ defmodule Accent.Plug.ResponseTest do
 
     test "raises ArgumentError if \"json_encoder\" is not defined" do
       assert_raise ArgumentError, fn ->
-        Accent.Plug.Response.init([json_decoder: Poison])
+        Accent.Plug.Response.init(json_decoder: Poison)
       end
     end
 
     test "sets the \"supported_cases\" option to the value passed in" do
-      opts = Accent.Plug.Response.init(@default_opts ++ [supported_cases: %{"test" => "some transformer"}])
+      opts =
+        Accent.Plug.Response.init(
+          @default_opts ++ [supported_cases: %{"test" => "some transformer"}]
+        )
 
       assert %{supported_cases: %{"test" => "some transformer"}} = opts
     end
@@ -52,11 +55,13 @@ defmodule Accent.Plug.ResponseTest do
     test "defaults the \"supported_cases\" option" do
       opts = Accent.Plug.Response.init(@default_opts)
 
-      assert %{supported_cases: %{
-        "camel" => Accent.Transformer.CamelCase,
-        "pascal" => Accent.Transformer.PascalCase,
-        "snake" => Accent.Transformer.SnakeCase
-      }} = opts
+      assert %{
+               supported_cases: %{
+                 "camel" => Accent.Transformer.CamelCase,
+                 "pascal" => Accent.Transformer.PascalCase,
+                 "snake" => Accent.Transformer.SnakeCase
+               }
+             } = opts
     end
   end
 
@@ -107,6 +112,5 @@ defmodule Accent.Plug.ResponseTest do
 
       assert conn.resp_body == "<p>This is not JSON, but it includes some hello_world</p>"
     end
-    
   end
 end

@@ -43,8 +43,12 @@ defmodule Accent.Plug.Response do
   def init(opts \\ []) do
     %{
       header: opts[:header] || "accent",
-      json_decoder: opts[:json_decoder] || raise(ArgumentError, "Accent.Plug.Response expects a :json_decoder option"),
-      json_encoder: opts[:json_encoder] || raise(ArgumentError, "Accent.Plug.Response expects a :json_encoder option"),
+      json_decoder:
+        opts[:json_decoder] ||
+          raise(ArgumentError, "Accent.Plug.Response expects a :json_decoder option"),
+      json_encoder:
+        opts[:json_encoder] ||
+          raise(ArgumentError, "Accent.Plug.Response expects a :json_encoder option"),
       supported_cases: opts[:supported_cases] || @default_cases
     }
   end
@@ -53,7 +57,7 @@ defmodule Accent.Plug.Response do
   def call(conn, opts) do
     if do_call?(conn, opts) do
       conn
-      |> register_before_send(fn(conn) -> before_send_callback(conn, opts) end)
+      |> register_before_send(fn conn -> before_send_callback(conn, opts) end)
     else
       conn
     end

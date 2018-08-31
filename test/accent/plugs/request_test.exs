@@ -6,13 +6,12 @@ defmodule Accent.Plug.RequestTest do
 
   describe "init/1" do
     test "sets the \"transformer\" option to the value passed in" do
-      assert Accent.Plug.Request.init(%{transformer: Accent.Transformer.CamelCase})
-        == %{transformer: Accent.Transformer.CamelCase}
+      assert Accent.Plug.Request.init(%{transformer: Accent.Transformer.CamelCase}) ==
+               %{transformer: Accent.Transformer.CamelCase}
     end
 
     test "defaults the \"transformer\" option to Accent.Transformer.SnakeCase" do
-      assert Accent.Plug.Request.init(%{})
-        == %{transformer: Accent.Transformer.SnakeCase}
+      assert Accent.Plug.Request.init(%{}) == %{transformer: Accent.Transformer.SnakeCase}
     end
   end
 
@@ -28,7 +27,9 @@ defmodule Accent.Plug.RequestTest do
     test "converts keys using provided transformer" do
       conn =
         conn(:post, "/", %{"hello_world" => "value"})
-        |> Accent.Plug.Request.call(Accent.Plug.Request.init([transformer: Accent.Transformer.CamelCase]))
+        |> Accent.Plug.Request.call(
+          Accent.Plug.Request.init(transformer: Accent.Transformer.CamelCase)
+        )
 
       assert conn.params == %{"HelloWorld" => "value"}
     end
@@ -37,7 +38,7 @@ defmodule Accent.Plug.RequestTest do
       conn =
         conn(:post, "/", "{\"helloWorld\": \"value\"}")
         |> put_req_header("content-type", "application/json")
-        |> Plug.Parsers.call(Plug.Parsers.init([parsers: [:json], json_decoder: Poison]))
+        |> Plug.Parsers.call(Plug.Parsers.init(parsers: [:json], json_decoder: Poison))
         |> Accent.Plug.Request.call(@opts)
 
       assert conn.params == %{"hello_world" => "value"}
@@ -47,7 +48,7 @@ defmodule Accent.Plug.RequestTest do
       conn =
         conn(:get, "/?helloWorld=value")
         |> put_req_header("content-type", "application/json")
-        |> Plug.Parsers.call(Plug.Parsers.init([parsers: [:json], json_decoder: Poison]))
+        |> Plug.Parsers.call(Plug.Parsers.init(parsers: [:json], json_decoder: Poison))
         |> Accent.Plug.Request.call(@opts)
 
       assert conn.params == %{"hello_world" => "value"}

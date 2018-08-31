@@ -3,21 +3,21 @@ defmodule Accent.Mixfile do
 
   def project do
     [
-     app: :accent,
-     name: "Accent",
-     description: "Plug for converting JSON API keys to different cases",
-     version: "0.2.0",
-     elixir: "~> 1.3",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps(),
-     package: package(),
-     preferred_cli_env: [
-       "coveralls": :test,
-       "coveralls.html": :test,
-       "coveralls.travis": :test
-     ],
-     test_coverage: [tool: ExCoveralls]
+      app: :accent,
+      name: "Accent",
+      description: "Plug for converting JSON API keys to different cases",
+      version: "0.2.0",
+      elixir: "~> 1.3",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      deps: deps(),
+      package: package(),
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.html": :test,
+        "coveralls.travis": :test
+      ],
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
