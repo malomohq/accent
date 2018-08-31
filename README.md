@@ -14,6 +14,10 @@ def deps do
 end
 ```
 
+Please note that you will need to provide `accent` with a JSON codec. Both
+[`poison`](https://github.com/devinus/poison) and
+[`jason`](https://github.com/michalmuskala/jason) are supported.
+
 ## Usage
 
 This project provides two plugs for handling the conversion of JSON keys to
