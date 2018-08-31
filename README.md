@@ -131,3 +131,4 @@ A special thanks to all of our contributors!
 
 * [@anthonator](https://github.com/anthonator)
 * [@maxsalven](https://github.com/maxsalven)
+* [@szajbus](https://github.com/szajbus)
