@@ -44,7 +44,7 @@ defmodule Accent.Mixfile do
       # dev
       {:ex_doc, ">= 0.0.0", only: [:dev]},
       # test
-      {:excoveralls, "~> 0.6.3", only: [:test]},
+      {:excoveralls, "~> 0.10", only: [:test]},
       {:poison, "~> 3.1.0", only: [:test]}
     ]
   end
