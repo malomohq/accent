@@ -14,7 +14,7 @@ defmodule Accent.Transformer.CamelCase do
   def call(""), do: ""
 
   def call(<<h::utf8, t::binary>>) do
-    String.Casing.upcase(<<h>>) <> do_camelize(t)
+    String.upcase(<<h>>) <> do_camelize(t)
   end
 
   # private
@@ -24,7 +24,7 @@ defmodule Accent.Transformer.CamelCase do
   end
 
   defp do_camelize(<<?_, h::utf8, t::binary>>) do
-    String.Casing.upcase(<<h>>) <> do_camelize(t)
+    String.upcase(<<h>>) <> do_camelize(t)
   end
 
   defp do_camelize(<<?_>>), do: <<>>
