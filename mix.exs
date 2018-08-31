@@ -27,12 +27,13 @@ defmodule Accent.Mixfile do
 
   defp deps do
     [
+      {:jason, "~> 1.0", optional: true},
       {:plug, "~> 1.3"},
+      {:poison, ">= 3.1.0 and < 5.0.0", optional: true},
       # dev
       {:ex_doc, ">= 0.0.0", only: [:dev]},
       # test
-      {:excoveralls, "~> 0.10", only: [:test]},
-      {:poison, ">= 3.1.0 and <= 5.0.0", only: [:test]}
+      {:excoveralls, "~> 0.10", only: [:test]}
     ]
   end
 
