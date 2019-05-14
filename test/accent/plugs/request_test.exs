@@ -31,7 +31,7 @@ defmodule Accent.Plug.RequestTest do
           Accent.Plug.Request.init(transformer: Accent.Transformer.CamelCase)
         )
 
-      assert conn.params == %{"HelloWorld" => "value"}
+      assert conn.params == %{"helloWorld" => "value"}
     end
 
     test "properly handles POST requests" do

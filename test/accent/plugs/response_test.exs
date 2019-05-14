@@ -75,7 +75,7 @@ defmodule Accent.Plug.ResponseTest do
         |> Accent.Plug.Response.call(@opts)
         |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
 
-      assert conn.resp_body == "{\"helloWorld\":\"value\"}"
+      assert conn.resp_body == "{\"HelloWorld\":\"value\"}"
     end
 
     test "deals with content-type having a charset" do
@@ -87,7 +87,7 @@ defmodule Accent.Plug.ResponseTest do
         |> Accent.Plug.Response.call(@opts)
         |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
 
-      assert conn.resp_body == "{\"helloWorld\":\"value\"}"
+      assert conn.resp_body == "{\"HelloWorld\":\"value\"}"
     end
 
     test "skips conversion if no header is provided" do

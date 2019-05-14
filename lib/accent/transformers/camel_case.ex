@@ -1,6 +1,6 @@
 defmodule Accent.Transformer.CamelCase do
   @moduledoc """
-  Converts the given binary or atom to CamelCase format.
+  Converts the given binary or atom to camelCase format.
   """
 
   @behaviour Accent.Transformer
@@ -14,7 +14,7 @@ defmodule Accent.Transformer.CamelCase do
   def call(""), do: ""
 
   def call(<<h::utf8, t::binary>>) do
-    String.upcase(<<h>>) <> do_camelize(t)
+    String.downcase(<<h>>) <> do_camelize(t)
   end
 
   # private

@@ -1,6 +1,6 @@
 defmodule Accent.Transformer.PascalCase do
   @moduledoc """
-  Converts the given binary or atom to pascalCase format.
+  Converts the given binary or atom to PascalCase format.
   """
 
   @behaviour Accent.Transformer
@@ -14,7 +14,7 @@ defmodule Accent.Transformer.PascalCase do
   def call(""), do: ""
 
   def call(<<h::utf8, t::binary>>) do
-    String.downcase(<<h>>) <> do_pascalize(t)
+    String.upcase(<<h>>) <> do_pascalize(t)
   end
 
   # private
