@@ -12,7 +12,7 @@ jobs:
       - uses: actions/cache@v1
 
         with:
-          key: build-dialyzer-${{ hashFiles('mix.lock') }}
+          key: build-dialyzer-${{ hashFiles('mix.lock') }}-1
 
           path: _build
 
