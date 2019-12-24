@@ -24,19 +24,18 @@ defmodule Accent.Plug.Response do
 
   ```
   plug Accent.Plug.Response, header: "x-accent",
-                             supported_cases: %{"pascal" => Accent.Transformer.PascalCase},
+                             supported_cases: %{"pascal" => Accent.Case.Pascal},
                              json_encoder: Jason,
                              json_decoder: Jason
   ```
   """
 
   import Plug.Conn
-  import Accent.Transformer
 
   @default_cases %{
-    "camel" => Accent.Transformer.CamelCase,
-    "pascal" => Accent.Transformer.PascalCase,
-    "snake" => Accent.Transformer.SnakeCase
+    "camel" => Accent.Case.Camel,
+    "pascal" => Accent.Case.Pascal,
+    "snake" => Accent.Case.Snake
   }
 
   @doc false
@@ -84,7 +83,7 @@ defmodule Accent.Plug.Response do
       resp_body =
         conn.resp_body
         |> json_decoder.decode!
-        |> transform(select_transformer(conn, opts))
+        |> Accent.Case.convert(select_transformer(conn, opts))
         |> json_encoder.encode!
 
       %{conn | resp_body: resp_body}

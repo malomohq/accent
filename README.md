@@ -33,11 +33,11 @@ option.
 
 Accent supports the following transformers out of the box:
 
-* `Accent.Transformer.CamelCase` (e.g. `CamelCase`)
-* `Accent.Transformer.PascalCase` (e.g. `pascalCase`)
-* `Accent.Transformer.SnakeCase` (e.g. `snake_case`)
+* `Accent.Case.Camel` (e.g. `camelCase`)
+* `Accent.Case.Pascal` (e.g. `PascalCase`)
+* `Accent.Case.Snake` (e.g. `snake_case`)
 
-If no transformer is provided then `Accent.Transformer.SnakeCase` will be
+If no transformer is provided then `Accent.Case.Snake` will be
 used.
 
 Please note that this plug will need to be executed after the request has
