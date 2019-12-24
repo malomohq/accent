@@ -12,7 +12,7 @@ jobs:
       - uses: actions/cache@v1
 
         with:
-          key: build-dialyzer-${{ hashFiles('mix.lock') }}-1
+          key: build-dialyzer-${{ matrix.elixir }}-${{ matrix.otp }}-${{ hashFiles('mix.lock') }}
 
           path: _build
 
@@ -42,7 +42,7 @@ jobs:
       - uses: actions/cache@v1
 
         with:
-          key: build-test-${{ hashFiles('mix.lock') }}
+          key: build-test-${{ matrix.elixir }}-${{ matrix.otp }}-${{ hashFiles('mix.lock') }}
 
           path: _build
 
