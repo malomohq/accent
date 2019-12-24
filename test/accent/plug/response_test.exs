@@ -2,9 +2,9 @@ defmodule Accent.Plug.ResponseTest do
   use ExUnit.Case
   use Plug.Test
 
-  @default_opts [json_decoder: Jason, json_encoder: Jason]
+  @default_opts [json_codec: Jason]
 
-  @opts Accent.Plug.Response.init(json_decoder: Jason, json_encoder: Jason)
+  @opts Accent.Plug.Response.init(json_codec: Jason)
 
   describe "init/1" do
     test "sets the \"header\" option to the value passed in" do
@@ -19,27 +19,15 @@ defmodule Accent.Plug.ResponseTest do
       assert %{header: "accent"} = opts
     end
 
-    test "sets the \"json_decoder\" option to the value passed in" do
+    test "sets the \"json_codec\" option to the value passed in" do
       opts = Accent.Plug.Response.init(@default_opts)
 
-      assert %{json_decoder: Jason} = opts
+      assert %{json_codec: Jason} = opts
     end
 
-    test "raises ArgumentError if \"json_decoder\" is not defined" do
+    test "raises ArgumentError if \"json_codec\" is not defined" do
       assert_raise ArgumentError, fn ->
-        Accent.Plug.Response.init(json_encoder: Jason)
-      end
-    end
-
-    test "sets the \"json_encoder\" option to the value passed in" do
-      opts = Accent.Plug.Response.init(@default_opts)
-
-      assert %{json_encoder: Jason} = opts
-    end
-
-    test "raises ArgumentError if \"json_encoder\" is not defined" do
-      assert_raise ArgumentError, fn ->
-        Accent.Plug.Response.init(json_decoder: Jason)
+        Accent.Plug.Response.init([])
       end
     end
 

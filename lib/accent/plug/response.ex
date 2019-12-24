@@ -12,11 +12,8 @@ defmodule Accent.Plug.Response do
 
   * `:header` - the HTTP header used to determine the case to convert the
     response body to before sending the response (default: `Accent`)
-  * `:json_encoder` - module used to encode JSON. The module is expected to
-    define a `encode!/1` function for encoding the response body as JSON.
-    (required)
-  * `:json_decoder` - module used to decode JSON. The module is expected to
-    define a `decode!/1` function for decoding JSON into a map. (required)
+  * `:json_codec` - module used to encode and decode JSON. The module is
+    expected to define `decode/1` and `encode!/1` functions (required).
   * `:supported_cases` - map that defines what cases a client can request. By
     default `camel`, `pascal` and `snake` are supported.
 
@@ -25,8 +22,7 @@ defmodule Accent.Plug.Response do
   ```
   plug Accent.Plug.Response, header: "x-accent",
                              supported_cases: %{"pascal" => Accent.Case.Pascal},
-                             json_encoder: Jason,
-                             json_decoder: Jason
+                             json_codec: Jason
   ```
   """
 
@@ -41,14 +37,15 @@ defmodule Accent.Plug.Response do
   @doc false
   def init(opts \\ []) do
     %{
-      header: opts[:header] || "accent",
-      json_decoder:
-        opts[:json_decoder] ||
-          raise(ArgumentError, "Accent.Plug.Response expects a :json_decoder option"),
-      json_encoder:
-        opts[:json_encoder] ||
-          raise(ArgumentError, "Accent.Plug.Response expects a :json_encoder option"),
-      supported_cases: opts[:supported_cases] || @default_cases
+      header:
+        opts[:header] ||
+          "accent",
+      json_codec:
+        opts[:json_codec] ||
+          raise(ArgumentError, "Accent.Plug.Response expects a :json_codec option"),
+      supported_cases:
+        opts[:supported_cases] ||
+          @default_cases
     }
   end
 
@@ -77,14 +74,13 @@ defmodule Accent.Plug.Response do
     is_json_response = String.contains?(response_content_type || "", "application/json")
 
     if is_json_response do
-      json_decoder = opts[:json_decoder]
-      json_encoder = opts[:json_encoder]
+      json_codec = opts[:json_codec]
 
       resp_body =
         conn.resp_body
-        |> json_decoder.decode!
+        |> json_codec.decode!
         |> Accent.Case.convert(select_transformer(conn, opts))
-        |> json_encoder.encode!
+        |> json_codec.encode!
 
       %{conn | resp_body: resp_body}
     else

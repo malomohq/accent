@@ -83,11 +83,8 @@ and `snake`.
 
 * `:header` - the HTTP header used to determine the case to convert the
   response body to before sending the response (default: `Accent`)
-* `:json_encoder` - module used to encode JSON. The module is expected to
-  define a `encode!/1` function for encoding the response body as JSON.
-  (required)
-* `:json_decoder` - module used to decode JSON. The module is expected to
-  define a `decode!/1` function for decoding JSON into a map. (required)
+* `:json_codec` - module used to encode and decode JSON. The module is
+  expected to define `decode/1` and `encode!/1` functions (required).
 * `:supported_cases` - map that defines what cases a client can request. By
   default `camel`, `pascal` and `snake` are supported.
 
@@ -108,8 +105,7 @@ with this router:
 defmodule MyAPI.Router do
   use Plug.Router
 
-  plug Accent.Plug.Response, json_encoder: Jason,
-                             json_decoder: Jason
+  plug Accent.Plug.Response, json_codec: Jason
 
   post "/endpoints" do
     send_resp(conn, 200, Jason.encode!(%{hello_world: "value"}))
