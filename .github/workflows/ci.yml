@@ -27,6 +27,12 @@ jobs:
 
       - run: mix dialyzer
 
+    strategy:
+      matrix:
+        elixir: [1.7.x, 1.8.x, 1.9.x]
+
+        otp: [20.x, 21.x, 22.x]
+
   test:
     runs-on: ubuntu-latest
 
