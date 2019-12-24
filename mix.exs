@@ -50,7 +50,7 @@ defmodule Accent.Mixfile do
       maintainers: ["Anthony Smith"],
       licenses: ["MIT"],
       links: %{
-        GitHub: "https://github.com/sticksnleaves/accent"
+        GitHub: "https://github.com/malomohq/accent"
       }
     }
   end
