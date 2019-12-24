@@ -1,7 +1,6 @@
 # Accent
 
 ![](https://github.com/malomohq/accent/workflows/ci/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/sticksnleaves/accent/badge.svg?branch=master)](https://coveralls.io/github/sticksnleaves/accent?branch=master)
 
 ## Installation
 
