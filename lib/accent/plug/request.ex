@@ -25,14 +25,14 @@ defmodule Accent.Plug.Request do
                      pass: ["*/*"],
                      json_decoder: Jason
 
-  plug Accent.Plug.Request, transformer: Accent.Case.Camel
+  plug Accent.Plug.Request, case: Accent.Case.Camel
   ```
   """
 
   @doc false
   def init(opts \\ []) do
     %{
-      transformer: opts[:transformer] || Accent.Case.Snake
+      case: opts[:case] || Accent.Case.Snake
     }
   end
 
@@ -40,7 +40,7 @@ defmodule Accent.Plug.Request do
   def call(conn, opts) do
     case conn.params do
       %Plug.Conn.Unfetched{} -> conn
-      _ -> %{conn | params: Accent.Case.convert(conn.params, opts[:transformer])}
+      _ -> %{conn | params: Accent.Case.convert(conn.params, opts[:case])}
     end
   end
 end

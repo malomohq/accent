@@ -5,13 +5,13 @@ defmodule Accent.Plug.RequestTest do
   @opts Accent.Plug.Request.init([])
 
   describe "init/1" do
-    test "sets the \"transformer\" option to the value passed in" do
-      assert Accent.Plug.Request.init(%{transformer: Accent.Case.Camel}) ==
-               %{transformer: Accent.Case.Camel}
+    test "sets the \"case\" option to the value passed in" do
+      assert Accent.Plug.Request.init(%{case: Accent.Case.Camel}) ==
+               %{case: Accent.Case.Camel}
     end
 
-    test "defaults the \"transformer\" option to Accent.Case.Snake" do
-      assert Accent.Plug.Request.init(%{}) == %{transformer: Accent.Case.Snake}
+    test "defaults the \"case\" option to Accent.Case.Snake" do
+      assert Accent.Plug.Request.init(%{}) == %{case: Accent.Case.Snake}
     end
   end
 
@@ -24,11 +24,11 @@ defmodule Accent.Plug.RequestTest do
       assert conn.params == %{"hello_world" => "value"}
     end
 
-    test "converts keys using provided transformer" do
+    test "converts keys using provided case" do
       conn =
         conn(:post, "/", %{"hello_world" => "value"})
         |> Accent.Plug.Request.call(
-          Accent.Plug.Request.init(transformer: Accent.Case.Camel)
+          Accent.Plug.Request.init(case: Accent.Case.Camel)
         )
 
       assert conn.params == %{"helloWorld" => "value"}
