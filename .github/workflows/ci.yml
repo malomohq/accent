@@ -3,6 +3,30 @@ name: ci
 on: push
 
 jobs:
+  dialyzer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/cache@v1
+
+        with:
+          key: build-dialyzer-${{ hashFiles('mix.lock') }}
+
+          path: _build
+
+      - uses: actions/setup-elixir@v1.2.0
+
+        with:
+          elixir-version: ${{ matrix.elixir }}
+
+          otp-version: ${{ matrix.otp }}
+
+      - run: mix deps.get
+
+      - run: mix dialyzer
+
   test:
     runs-on: ubuntu-latest
 
