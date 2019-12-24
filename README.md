@@ -43,14 +43,14 @@ used.
 Please note that this plug will need to be executed after the request has
 been parsed.
 
-### Example
+**Example**
 
 Given this request:
 
 ```
 curl -X POST https://yourapi.com/endpoints \
   -H "Content-Type: application/json" \
-  -d '{"helloWorld": "value"}'
+  -d '{"hello": "Accent"}'
 ```
 
 a router with this configuration:
@@ -66,7 +66,7 @@ plug Accent.Plug.Request
 could expect to receive a `conn.params` value of:
 
 ```elixir
-%{"hello_world" => "value"}
+%{"hello" => "Accent"}
 ```
 
 ### `Accent.Plug.Response`
@@ -75,12 +75,16 @@ Transforms the keys of an HTTP response to the case requested by the client.
 
 A client can request what case the keys are formatted in by passing the case
 as a header in the request. By default the header key is `Accent`. If the
-client does not request a case or requests an unsupported case then no
-conversion will happen. By default the supported cases are `camel`, `pascal`
-and `snake`.
+client does not request a case or requests an unsupported case then a default
+case defined by `:default_case` will be used. If no default case is provided
+then no conversion will happen. By default the supported cases are `camel`,
+`pascal` and `snake`.
 
-### Options
+## Options
 
+* `:default_case` - module used to case the response when the client does not
+  request a case or requests an unsupported case. When not provided then no
+  conversation will happen for the above scenarios. Defaults to `nil`.
 * `:header` - the HTTP header used to determine the case to convert the
   response body to before sending the response (default: `Accent`)
 * `:json_codec` - module used to encode and decode JSON. The module is
@@ -88,15 +92,22 @@ and `snake`.
 * `:supported_cases` - map that defines what cases a client can request. By
   default `camel`, `pascal` and `snake` are supported.
 
-### Examples
+**Example**
+
+```
+plug Accent.Plug.Response, default_case: Accent.Case.Snake,
+                           header: "x-accent",
+                           supported_cases: %{"pascal" => Accent.Case.Pascal},
+                           json_codec: Jason
+```
 
 Given this request:
 
 ```
 curl -X POST https://yourapi.com/endpoints \
   -H "Content-Type: application/json" \
-  -H "Accent: pascal" \
-  -d '{"helloWorld": "value"}'
+  -H "Accent: camel" \
+  -d '{"hello": "Accent"}'
 ```
 
 with this router:
@@ -107,8 +118,8 @@ defmodule MyAPI.Router do
 
   plug Accent.Plug.Response, json_codec: Jason
 
-  post "/endpoints" do
-    send_resp(conn, 200, Jason.encode!(%{hello_world: "value"}))
+  post "/" do
+    send_resp(conn, 200, Jason.encode!(%{hello_back: "Anthony"}))
   end
 end
 ```
@@ -117,7 +128,7 @@ a client could expect a JSON response of:
 
 ```json
 {
-  "helloWorld": "value"
+  "helloBack": "Anthony"
 }
 ```
 

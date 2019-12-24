@@ -4,12 +4,16 @@ defmodule Accent.Plug.Response do
 
   A client can request what case the keys are formatted in by passing the case
   as a header in the request. By default the header key is `Accent`. If the
-  client does not request a case or requests an unsupported case then no
-  conversion will happen. By default the supported cases are `camel`, `pascal`
-  and `snake`.
+  client does not request a case or requests an unsupported case then a default
+  case defined by `:default_case` will be used. If no default case is provided
+  then no conversion will happen. By default the supported cases are `camel`,
+  `pascal` and `snake`.
 
   ## Options
 
+  * `:default_case` - module used to case the response when the client does not
+    request a case or requests an unsupported case. When not provided then no
+    conversation will happen for the above scenarios. Defaults to `nil`.
   * `:header` - the HTTP header used to determine the case to convert the
     response body to before sending the response (default: `Accent`)
   * `:json_codec` - module used to encode and decode JSON. The module is
@@ -20,7 +24,8 @@ defmodule Accent.Plug.Response do
   ## Examples
 
   ```
-  plug Accent.Plug.Response, header: "x-accent",
+  plug Accent.Plug.Response, default_case: Accent.Case.Snake,
+                             header: "x-accent",
                              supported_cases: %{"pascal" => Accent.Case.Pascal},
                              json_codec: Jason
   ```
@@ -37,6 +42,9 @@ defmodule Accent.Plug.Response do
   @doc false
   def init(opts \\ []) do
     %{
+      default_case:
+        opts[:default_case] ||
+          nil,
       header:
         opts[:header] ||
           "accent",
@@ -102,8 +110,9 @@ defmodule Accent.Plug.Response do
 
   defp select_transformer(conn, opts) do
     accent = get_req_header(conn, opts[:header]) |> Enum.at(0)
+    default_case = opts[:default_case]
     supported_cases = opts[:supported_cases]
 
-    supported_cases[accent]
+    supported_cases[accent] || default_case
   end
 end

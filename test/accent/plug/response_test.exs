@@ -7,6 +7,12 @@ defmodule Accent.Plug.ResponseTest do
   @opts Accent.Plug.Response.init(json_codec: Jason)
 
   describe "init/1" do
+    test "sets the \"default_case\" option to the value passed in" do
+      opts = Accent.Plug.Response.init(@default_opts ++ [default_case: Accent.Case.Pascal])
+
+      assert %{default_case: Accent.Case.Pascal} = opts
+    end
+
     test "sets the \"header\" option to the value passed in" do
       opts = Accent.Plug.Response.init(@default_opts ++ [header: "x-accent"])
 
@@ -66,6 +72,17 @@ defmodule Accent.Plug.ResponseTest do
       assert conn.resp_body == "{\"HelloWorld\":\"value\"}"
     end
 
+    test "converts keys based on default case when no header is provided" do
+      conn =
+        conn(:post, "/")
+        |> put_req_header("content-type", "application/json")
+        |> put_resp_header("content-type", "application/json")
+        |> Accent.Plug.Response.call(Map.put(@opts, :default_case, Accent.Case.Camel))
+        |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
+
+      assert conn.resp_body == "{\"helloWorld\":\"value\"}"
+    end
+
     test "deals with content-type having a charset" do
       conn =
         conn(:post, "/")
@@ -78,7 +95,7 @@ defmodule Accent.Plug.ResponseTest do
       assert conn.resp_body == "{\"HelloWorld\":\"value\"}"
     end
 
-    test "skips conversion if no header is provided" do
+    test "skips conversion if no header or default case is provided" do
       conn =
         conn(:post, "/")
         |> put_req_header("content-type", "application/json")
@@ -89,7 +106,7 @@ defmodule Accent.Plug.ResponseTest do
       assert conn.resp_body == "{\"hello_world\":\"value\"}"
     end
 
-    test "skips conversion if content type is not JSON" do
+    test "skips conversion if content-type is not JSON" do
       conn =
         conn(:post, "/")
         |> put_req_header("accent", "pascal")
