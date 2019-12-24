@@ -38,7 +38,7 @@ defmodule Accent.Plug.RequestTest do
       conn =
         conn(:post, "/", "{\"helloWorld\": \"value\"}")
         |> put_req_header("content-type", "application/json")
-        |> Plug.Parsers.call(Plug.Parsers.init(parsers: [:json], json_decoder: Poison))
+        |> Plug.Parsers.call(Plug.Parsers.init(parsers: [:json], json_decoder: Jason))
         |> Accent.Plug.Request.call(@opts)
 
       assert conn.params == %{"hello_world" => "value"}
@@ -48,7 +48,7 @@ defmodule Accent.Plug.RequestTest do
       conn =
         conn(:get, "/?helloWorld=value")
         |> put_req_header("content-type", "application/json")
-        |> Plug.Parsers.call(Plug.Parsers.init(parsers: [:json], json_decoder: Poison))
+        |> Plug.Parsers.call(Plug.Parsers.init(parsers: [:json], json_decoder: Jason))
         |> Accent.Plug.Request.call(@opts)
 
       assert conn.params == %{"hello_world" => "value"}

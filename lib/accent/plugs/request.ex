@@ -23,7 +23,7 @@ defmodule Accent.Plug.Request do
   ```
   plug Plug.Parsers, parsers: [:urlencoded, :multipart, :json],
                      pass: ["*/*"],
-                     json_decoder: Poison
+                     json_decoder: Jason
 
   plug Accent.Plug.Request, transformer: Accent.Transformer.CamelCase
   ```

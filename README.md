@@ -58,7 +58,7 @@ a router with this configuration:
 ```elixir
 plug Plug.Parsers, parsers: [:urlencoded, :multipart, :json],
                    pass: ["*/*"],
-                   json_decoder: Poison
+                   json_decoder: Jason
 
 plug Accent.Plug.Request
 ```
@@ -108,11 +108,11 @@ with this router:
 defmodule MyAPI.Router do
   use Plug.Router
 
-  plug Accent.Plug.Response, json_encoder: Poison,
-                             json_decoder: Poison
+  plug Accent.Plug.Response, json_encoder: Jason,
+                             json_decoder: Jason
 
   post "/endpoints" do
-    send_resp(conn, 200, Poison.encode!(%{hello_world: "value"}))
+    send_resp(conn, 200, Jason.encode!(%{hello_world: "value"}))
   end
 end
 ```

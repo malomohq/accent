@@ -23,7 +23,6 @@ defmodule Accent.Mixfile do
     [
       { :jason,  "~> 1.0", optional: true },
       { :plug,   "~> 1.3" },
-      { :poison, ">= 3.1.0 and < 5.0.0", optional: true },
 
       # dev
 

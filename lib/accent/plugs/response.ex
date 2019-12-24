@@ -25,8 +25,8 @@ defmodule Accent.Plug.Response do
   ```
   plug Accent.Plug.Response, header: "x-accent",
                              supported_cases: %{"pascal" => Accent.Transformer.PascalCase},
-                             json_encoder: Poison,
-                             json_decoder: Poison
+                             json_encoder: Jason,
+                             json_decoder: Jason
   ```
   """
 
