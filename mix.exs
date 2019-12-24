@@ -21,8 +21,8 @@ defmodule Accent.Mixfile do
 
   defp deps do
     [
-      { :jason,  "~> 1.0", optional: true },
-      { :plug,   "~> 1.3" },
+      { :jason, "~> 1.0", optional: true },
+      { :plug,  "~> 1.3" },
 
       # dev
 
