@@ -3,6 +3,36 @@ name: ci
 on: push
 
 jobs:
+  dialyzer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: actions/cache@v1
+
+        with:
+          key: build-dialyzer-${{ matrix.elixir }}-${{ matrix.otp }}-${{ hashFiles('mix.lock') }}
+
+          path: _build
+
+      - uses: actions/setup-elixir@v1.2.0
+
+        with:
+          elixir-version: ${{ matrix.elixir }}
+
+          otp-version: ${{ matrix.otp }}
+
+      - run: mix deps.get
+
+      - run: mix dialyzer
+
+    strategy:
+      matrix:
+        elixir: [1.7.x, 1.8.x, 1.9.x]
+
+        otp: [20.x, 21.x, 22.x]
+
   test:
     runs-on: ubuntu-latest
 
@@ -12,7 +42,7 @@ jobs:
       - uses: actions/cache@v1
 
         with:
-          key: build-test-${{ hashFiles('mix.lock') }}
+          key: build-test-${{ matrix.elixir }}-${{ matrix.otp }}-${{ hashFiles('mix.lock') }}
 
           path: _build
 

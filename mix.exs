@@ -11,6 +11,7 @@ defmodule Accent.Mixfile do
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      dialyzer: dialyzer(),
       package: package(),
       preferred_cli_env: [
         coveralls: :test,
@@ -31,9 +32,16 @@ defmodule Accent.Mixfile do
       {:plug, "~> 1.3"},
       {:poison, ">= 3.1.0 and < 5.0.0", optional: true},
       # dev
-      {:ex_doc, ">= 0.0.0", only: [:dev]},
+      {:dialyxir, "~> 1.0.0-rc", only: :dev, runtime: false},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       # test
-      {:excoveralls, "~> 0.10", only: [:test]}
+      {:excoveralls, "~> 0.10", only: :test}
+    ]
+  end
+
+  defp dialyzer do
+    [
+      plt_core_path: "./_build/#{Mix.env()}"
     ]
   end
 
