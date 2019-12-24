@@ -31,9 +31,10 @@ defmodule Accent.Mixfile do
       {:plug, "~> 1.3"},
       {:poison, ">= 3.1.0 and < 5.0.0", optional: true},
       # dev
-      {:ex_doc, ">= 0.0.0", only: [:dev]},
+      {:dialyxir, "~> 1.0.0-rc", only: :dev, runtime: false},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       # test
-      {:excoveralls, "~> 0.10", only: [:test]}
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
