@@ -52,8 +52,7 @@ defmodule Accent.Plug.Response do
   @doc false
   def call(conn, opts) do
     if do_call?(conn, opts) do
-      conn
-      |> register_before_send(fn conn -> before_send_callback(conn, opts) end)
+      register_before_send(conn, fn conn -> before_send_callback(conn, opts) end)
     else
       conn
     end
