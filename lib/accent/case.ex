@@ -1,4 +1,4 @@
-defmodule Accent.Transformer do
+defmodule Accent.Case do
   @doc """
   Converts a string or atom to the same or different case.
   """
@@ -7,17 +7,16 @@ defmodule Accent.Transformer do
   @doc """
   Convert the keys of a map based on the provided transformer.
 
-  If the value of
-  a given key is a map then all keys of the embedded map will be converted as
-  well.
+  If the value of a given key is a map then all keys of the embedded map will be
+  converted as well.
   """
-  @spec transform(map, Accent.Transformer) :: map
-  def transform(%{} = map, transformer) do
+  @spec convert(map, module) :: map
+  def convert(map, transformer) when is_map(map) do
     for {k, v} <- map, into: %{} do
       key = transformer.call(k)
 
       if is_map(v) || is_list(v) do
-        {key, transform(v, transformer)}
+        {key, convert(v, transformer)}
       else
         {key, v}
       end
@@ -27,11 +26,11 @@ defmodule Accent.Transformer do
   @doc """
   Convert the keys of a list based on the provided transformer.
   """
-  @spec transform(list, Accent.Transformer) :: list
-  def transform(list, transformer) do
+  @spec convert(list, module) :: list
+  def convert(list, transformer) when is_list(list) do
     for i <- list, into: [] do
       if is_map(i) || is_list(i) do
-        transform(i, transformer)
+        convert(i, transformer)
       else
         i
       end

@@ -2,11 +2,17 @@ defmodule Accent.Plug.ResponseTest do
   use ExUnit.Case
   use Plug.Test
 
-  @default_opts [json_decoder: Poison, json_encoder: Poison]
+  @default_opts [json_codec: Jason]
 
-  @opts Accent.Plug.Response.init(json_decoder: Poison, json_encoder: Poison)
+  @opts Accent.Plug.Response.init(json_codec: Jason)
 
   describe "init/1" do
+    test "sets the \"default_case\" option to the value passed in" do
+      opts = Accent.Plug.Response.init(@default_opts ++ [default_case: Accent.Case.Pascal])
+
+      assert %{default_case: Accent.Case.Pascal} = opts
+    end
+
     test "sets the \"header\" option to the value passed in" do
       opts = Accent.Plug.Response.init(@default_opts ++ [header: "x-accent"])
 
@@ -19,27 +25,15 @@ defmodule Accent.Plug.ResponseTest do
       assert %{header: "accent"} = opts
     end
 
-    test "sets the \"json_decoder\" option to the value passed in" do
+    test "sets the \"json_codec\" option to the value passed in" do
       opts = Accent.Plug.Response.init(@default_opts)
 
-      assert %{json_decoder: Poison} = opts
+      assert %{json_codec: Jason} = opts
     end
 
-    test "raises ArgumentError if \"json_decoder\" is not defined" do
+    test "raises ArgumentError if \"json_codec\" is not defined" do
       assert_raise ArgumentError, fn ->
-        Accent.Plug.Response.init(json_encoder: Poison)
-      end
-    end
-
-    test "sets the \"json_encoder\" option to the value passed in" do
-      opts = Accent.Plug.Response.init(@default_opts)
-
-      assert %{json_encoder: Poison} = opts
-    end
-
-    test "raises ArgumentError if \"json_encoder\" is not defined" do
-      assert_raise ArgumentError, fn ->
-        Accent.Plug.Response.init(json_decoder: Poison)
+        Accent.Plug.Response.init([])
       end
     end
 
@@ -57,9 +51,9 @@ defmodule Accent.Plug.ResponseTest do
 
       assert %{
                supported_cases: %{
-                 "camel" => Accent.Transformer.CamelCase,
-                 "pascal" => Accent.Transformer.PascalCase,
-                 "snake" => Accent.Transformer.SnakeCase
+                 "camel" => Accent.Case.Camel,
+                 "pascal" => Accent.Case.Pascal,
+                 "snake" => Accent.Case.Snake
                }
              } = opts
     end
@@ -75,6 +69,17 @@ defmodule Accent.Plug.ResponseTest do
         |> Accent.Plug.Response.call(@opts)
         |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
 
+      assert conn.resp_body == "{\"HelloWorld\":\"value\"}"
+    end
+
+    test "converts keys based on default case when no header is provided" do
+      conn =
+        conn(:post, "/")
+        |> put_req_header("content-type", "application/json")
+        |> put_resp_header("content-type", "application/json")
+        |> Accent.Plug.Response.call(Map.put(@opts, :default_case, Accent.Case.Camel))
+        |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
+
       assert conn.resp_body == "{\"helloWorld\":\"value\"}"
     end
 
@@ -87,10 +92,10 @@ defmodule Accent.Plug.ResponseTest do
         |> Accent.Plug.Response.call(@opts)
         |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
 
-      assert conn.resp_body == "{\"helloWorld\":\"value\"}"
+      assert conn.resp_body == "{\"HelloWorld\":\"value\"}"
     end
 
-    test "skips conversion if no header is provided" do
+    test "skips conversion if no header or default case is provided" do
       conn =
         conn(:post, "/")
         |> put_req_header("content-type", "application/json")
@@ -101,7 +106,7 @@ defmodule Accent.Plug.ResponseTest do
       assert conn.resp_body == "{\"hello_world\":\"value\"}"
     end
 
-    test "skips conversion if content type is not JSON" do
+    test "skips conversion if content-type is not JSON" do
       conn =
         conn(:post, "/")
         |> put_req_header("accent", "pascal")

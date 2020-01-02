@@ -3,28 +3,28 @@ defmodule Accent.TransformerTest do
 
   describe "transform/2" do
     test "transforms the keys of a map" do
-      assert Accent.Transformer.transform(
+      assert Accent.Case.convert(
                %{"helloWorld" => "value"},
-               Accent.Transformer.SnakeCase
+               Accent.Case.Snake
              ) == %{"hello_world" => "value"}
     end
 
     test "transforms the keys of embedded maps" do
-      assert Accent.Transformer.transform(
+      assert Accent.Case.convert(
                %{"helloWorld" => %{"fooBar" => "value"}},
-               Accent.Transformer.SnakeCase
+               Accent.Case.Snake
              ) == %{"hello_world" => %{"foo_bar" => "value"}}
     end
 
     test "property handles arrays" do
-      assert Accent.Transformer.transform(
+      assert Accent.Case.convert(
                %{"helloWorld" => [%{"fooBar" => "value"}]},
-               Accent.Transformer.SnakeCase
+               Accent.Case.Snake
              ) == %{"hello_world" => [%{"foo_bar" => "value"}]}
 
-      assert Accent.Transformer.transform(
+      assert Accent.Case.convert(
                %{"helloWorld" => ["item"]},
-               Accent.Transformer.SnakeCase
+               Accent.Case.Snake
              ) == %{"hello_world" => ["item"]}
     end
   end

@@ -8,11 +8,11 @@ defmodule Accent.Plug.Request do
 
   Accent supports the following transformers out of the box:
 
-  * `Accent.Transformer.CamelCase` (e.g. `CamelCase`)
-  * `Accent.Transformer.PascalCase` (e.g. `pascalCase`)
-  * `Accent.Transformer.SnakeCase` (e.g. `snake_case`)
+  * `Accent.Case.Camel` (e.g. `camelCase`)
+  * `Accent.Case.Pascal` (e.g. `PascalCase`)
+  * `Accent.Case.Snake` (e.g. `snake_case`)
 
-  If no transformer is provided then `Accent.Transformer.SnakeCase` will be
+  If no transformer is provided then `Accent.Case.Snake` will be
   used.
 
   Please note that this plug will need to be executed after the request has
@@ -23,16 +23,16 @@ defmodule Accent.Plug.Request do
   ```
   plug Plug.Parsers, parsers: [:urlencoded, :multipart, :json],
                      pass: ["*/*"],
-                     json_decoder: Poison
+                     json_decoder: Jason
 
-  plug Accent.Plug.Request, transformer: Accent.Transformer.CamelCase
+  plug Accent.Plug.Request, case: Accent.Case.Camel
   ```
   """
 
   @doc false
   def init(opts \\ []) do
     %{
-      transformer: opts[:transformer] || Accent.Transformer.SnakeCase
+      case: opts[:case] || Accent.Case.Snake
     }
   end
 
@@ -40,7 +40,7 @@ defmodule Accent.Plug.Request do
   def call(conn, opts) do
     case conn.params do
       %Plug.Conn.Unfetched{} -> conn
-      _ -> %{conn | params: Accent.Transformer.transform(conn.params, opts[:transformer])}
+      _ -> %{conn | params: Accent.Case.convert(conn.params, opts[:case])}
     end
   end
 end
