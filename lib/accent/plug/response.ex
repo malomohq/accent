@@ -59,58 +59,53 @@ defmodule Accent.Plug.Response do
 
   @doc false
   def call(conn, opts) do
-    if do_call?(conn, opts) do
-      register_before_send(conn, fn conn -> before_send_callback(conn, opts) end)
-    else
-      conn
-    end
+    register_before_send(conn, fn conn -> before_send_callback(conn, opts) end)
   end
 
   # private
 
   defp before_send_callback(conn, opts) do
-    response_content_type =
-      conn
-      |> get_resp_header("content-type")
-      |> Enum.at(0)
+    if do_call?(conn, opts) do
+      response_content_type =
+        conn
+        |> get_resp_header("content-type")
+        |> Enum.at(0)
 
-    # Note - we don't support "+json" content types, and probably shouldn't add
-    # as a general feature because they may have specifications for the param
-    # names - e.g. https://tools.ietf.org/html/rfc7265#page-6 that mean the
-    # translation would be inappropriate
-    is_json_response = String.contains?(response_content_type || "", "application/json")
+      # Note - we don't support "+json" content types, and probably shouldn't add
+      # as a general feature because they may have specifications for the param
+      # names - e.g. https://tools.ietf.org/html/rfc7265#page-6 that mean the
+      # translation would be inappropriate
+      is_json_response = String.contains?(response_content_type || "", "application/json")
 
-    if is_json_response do
-      json_codec = opts[:json_codec]
+      if is_json_response do
+        json_codec = opts[:json_codec]
 
-      resp_body =
-        conn.resp_body
-        |> json_codec.decode!
-        |> Accent.Case.convert(select_transformer(conn, opts))
-        |> json_codec.encode!
+        resp_body =
+          conn.resp_body
+          |> json_codec.decode!
+          |> Accent.Case.convert(select_transformer(conn, opts))
+          |> json_codec.encode!
 
-      %{conn | resp_body: resp_body}
+        %{conn | resp_body: resp_body}
+      else
+        conn
+      end
     else
       conn
     end
   end
 
   defp do_call?(conn, opts) do
-    content_type =
-      conn
-      |> get_req_header("content-type")
-      |> Enum.at(0)
-
-    is_json = String.contains?(content_type || "", "application/json")
-
     has_transformer = select_transformer(conn, opts)
 
-    is_json && has_transformer
+    has_transformer
   end
 
   defp select_transformer(conn, opts) do
     accent = get_req_header(conn, opts[:header]) |> Enum.at(0)
+
     default_case = opts[:default_case]
+
     supported_cases = opts[:supported_cases]
 
     supported_cases[accent] || default_case

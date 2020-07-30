@@ -64,7 +64,6 @@ defmodule Accent.Plug.ResponseTest do
       conn =
         conn(:post, "/")
         |> put_req_header("accent", "pascal")
-        |> put_req_header("content-type", "application/json")
         |> put_resp_header("content-type", "application/json")
         |> Accent.Plug.Response.call(@opts)
         |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
@@ -75,7 +74,6 @@ defmodule Accent.Plug.ResponseTest do
     test "converts keys based on default case when no header is provided" do
       conn =
         conn(:post, "/")
-        |> put_req_header("content-type", "application/json")
         |> put_resp_header("content-type", "application/json")
         |> Accent.Plug.Response.call(Map.put(@opts, :default_case, Accent.Case.Camel))
         |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
@@ -87,7 +85,6 @@ defmodule Accent.Plug.ResponseTest do
       conn =
         conn(:post, "/")
         |> put_req_header("accent", "pascal")
-        |> put_req_header("content-type", "application/json; charset=utf-8")
         |> put_resp_header("content-type", "application/json; charset=utf-8")
         |> Accent.Plug.Response.call(@opts)
         |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
@@ -98,7 +95,6 @@ defmodule Accent.Plug.ResponseTest do
     test "skips conversion if no header or default case is provided" do
       conn =
         conn(:post, "/")
-        |> put_req_header("content-type", "application/json")
         |> put_resp_header("content-type", "application/json")
         |> Accent.Plug.Response.call(@opts)
         |> Plug.Conn.send_resp(200, "{\"hello_world\":\"value\"}")
@@ -110,7 +106,6 @@ defmodule Accent.Plug.ResponseTest do
       conn =
         conn(:post, "/")
         |> put_req_header("accent", "pascal")
-        |> put_req_header("content-type", "text/html")
         |> put_resp_header("content-type", "text/html")
         |> Accent.Plug.Response.call(@opts)
         |> Plug.Conn.send_resp(200, "<p>This is not JSON, but it includes some hello_world</p>")
