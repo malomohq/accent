@@ -32,7 +32,7 @@ jobs:
         elixir: ["1.7.x", "1.8.x", "1.9.x", "1.10.x"]
 
         exclude:
-          - elixir: "1.7.x"
+          - elixir: "1.10.x"
 
             otp: "20.x"
 
@@ -67,7 +67,7 @@ jobs:
         elixir: ["1.7.x", "1.8.x", "1.9.x", "1.10.x"]
 
         exclude:
-          - elixir: "1.7.x"
+          - elixir: "1.10.x"
 
             otp: "20.x"
 
