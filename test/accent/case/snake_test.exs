@@ -12,6 +12,7 @@ defmodule Accent.Case.SnakeTest do
 
     test "converts snake_case to snake_case" do
       assert Accent.Case.Snake.call("hello_world") == "hello_world"
+      assert Accent.Case.Snake.call("hello_world_1") == "hello_world_1"
     end
 
     test "supports atom as an input" do

@@ -22,9 +22,7 @@ defmodule Accent.Case.Snake do
   end
 
   defp do_transform(<<h, t::binary>>) do
-    is_upper_case = String.upcase(<<h>>) == <<h>>
-
-    if is_upper_case do
+    if Accent.Helpers.Casing.upper?(<<h>>) do
       "_" <> String.downcase(<<h>>) <> do_transform(t)
     else
       <<h>> <> do_transform(t)
