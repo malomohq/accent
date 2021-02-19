@@ -26,7 +26,7 @@ defmodule Accent.Mixfile do
 
       # dev
 
-      { :dialyxir, "~> 1.0.0-rc", only: :dev, runtime: false },
+      { :dialyxir, "~> 1.1.0", only: :dev, runtime: false },
       { :ex_doc,   ">= 0.0.0", only: :dev, runtime: false },
     ]
   end
