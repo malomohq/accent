@@ -16,7 +16,7 @@ jobs:
 
           path: _build
 
-      - uses: actions/setup-elixir@v1
+      - uses: erlef/setup-elixir@v1
 
         with:
           elixir-version: ${{ matrix.elixir }}
@@ -35,9 +35,9 @@ jobs:
           - elixir: "1.10.x"
 
             otp: "20.x"
-            
+
           - elixir: "1.11.x"
-          
+
             otp: "20.x"
 
         otp: ["20.x", "21.x", "22.x"]
@@ -55,7 +55,7 @@ jobs:
 
           path: _build
 
-      - uses: actions/setup-elixir@v1
+      - uses: erlef/setup-elixir@v1
 
         with:
           elixir-version: ${{ matrix.elixir }}
@@ -74,9 +74,9 @@ jobs:
           - elixir: "1.10.x"
 
             otp: "20.x"
-            
+
           - elixir: "1.11.x"
-          
+
             otp: "20.x"
 
         otp: ["20.x", "21.x", "22.x"]
