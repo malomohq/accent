@@ -9,7 +9,7 @@ This package can be installed by adding `accent` to your list of dependencies in
 
 ```elixir
 def deps do
-  [{:accent, "~> 1.0"}]
+  [{:accent, "~> 1.1"}]
 end
 ```
 
