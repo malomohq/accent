@@ -31,6 +31,15 @@ jobs:
       matrix:
         elixir: [1.12.x, 1.13.x, 1.14.x]
 
+        exclude:
+          - elixir: 1.12.x
+
+            otp: 25.x
+
+          - elixir: 1.13.x
+
+            otp: 25.x
+
         otp: [24.x, 25.x]
 
   test:
@@ -60,5 +69,14 @@ jobs:
     strategy:
       matrix:
         elixir: [1.12.x, 1.13.x, 1.14.x]
+
+        exclude:
+          - elixir: 1.12.x
+
+            otp: 25.x
+
+          - elixir: 1.13.x
+
+            otp: 25.x
 
         otp: [24.x, 25.x]
