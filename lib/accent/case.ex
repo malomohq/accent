@@ -22,10 +22,7 @@ defmodule Accent.Case do
       end
     end
   end
-
-  @doc """
-  Convert the keys of a list based on the provided transformer.
-  """
+  
   @spec convert(list, module) :: list
   def convert(list, transformer) when is_list(list) do
     for i <- list, into: [] do
